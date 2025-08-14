@@ -1,0 +1,32 @@
+%YAML 1.2
+---
+name: Defold Console
+file_extensions: []
+scope: text.defold.console
+hidden: true
+
+contexts:
+  main:
+    # Error patterns
+    - match: "(?i)error"
+      scope: invalid
+    - match: "(?i)failed"
+      scope: invalid
+    # Warning patterns
+    - match: "(?i)warning"
+      scope: string
+    # Info patterns
+    - match: "(?i)info"
+      scope: comment
+    # Paths and filenames
+    - match: '([a-zA-Z]:[/\\]|/)[a-zA-Z0-9_/\\.-]+'
+      scope: entity.name.function
+    # Lua specific
+    - match: '\b(?:function|local|if|then|else|elseif|end|for|in|do|while|repeat|until|return|break)\b'
+      scope: keyword.control
+    - match: '\b(?:nil|true|false)\b'
+      scope: constant.language
+    - match: '\b[A-Z][A-Z0-9_]*\b'
+      scope: constant.other
+    - match: '\b[a-zA-Z_][a-zA-Z0-9_]*(?=\s*\()'
+      scope: entity.name.function

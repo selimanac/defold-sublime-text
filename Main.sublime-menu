@@ -149,6 +149,22 @@
                             "base_file": "${packages}/Defold/Defold.sublime-settings",
                             "default": "{\n\t$0\n}"
                         }
+                    },
+                    {
+                        "caption": "-"
+                    },
+                    {
+                        "caption": "Console",
+                        "children": [
+                            {
+                                "caption": "Show Console",
+                                "command": "defold_show_console"
+                            },
+                            {
+                                "caption": "Refresh Console",
+                                "command": "defold_refresh_console"
+                            }
+                        ]
                     }
                 ]
             }

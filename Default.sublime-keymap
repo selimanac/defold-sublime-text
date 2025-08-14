@@ -142,5 +142,12 @@
             "ctrl+r"
         ],
         "command": "defold_restart_extender"
+    },
+    {
+        "keys": [
+            "ctrl+d",
+            "ctrl+c"
+        ],
+        "command": "defold_show_console"
     }
 ]
