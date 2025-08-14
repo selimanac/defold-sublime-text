@@ -1,0 +1,157 @@
+[
+    {
+        "id": "tools",
+        "children": [
+            {
+                "caption": "Defold",
+                "mnemonic": "D",
+                "id": "defold",
+                "children": [
+                    {
+                        "caption": "Build Commands",
+                        "children": [
+                            {
+                                "caption": "Build",
+                                "command": "defold_command_handler",
+                                "args": {
+                                    "command": "build"
+                                }
+                            },
+                            {
+                                "caption": "Hot Reload",
+                                "command": "defold_command_handler",
+                                "args": {
+                                    "command": "hot-reload"
+                                }
+                            },
+                            {
+                                "caption": "Rebuild",
+                                "command": "defold_command_handler",
+                                "args": {
+                                    "command": "rebuild"
+                                }
+                            },
+                            {
+                                "caption": "Build HTML5",
+                                "command": "defold_command_handler",
+                                "args": {
+                                    "command": "build-html5"
+                                }
+                            },
+                            {
+                                "caption": "Rebundle",
+                                "command": "defold_command_handler",
+                                "args": {
+                                    "command": "rebundle"
+                                }
+                            },
+                            {
+                                "caption": "Fetch Libraries",
+                                "command": "defold_command_handler",
+                                "args": {
+                                    "command": "fetch-libraries"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "caption": "Debugger",
+                        "children": [
+                            {
+                                "caption": "Start",
+                                "command": "defold_command_handler",
+                                "args": {
+                                    "command": "debugger-start"
+                                }
+                            },
+                            {
+                                "caption": "Stop",
+                                "command": "defold_command_handler",
+                                "args": {
+                                    "command": "debugger-stop"
+                                }
+                            },
+                            {
+                                "caption": "Break",
+                                "command": "defold_command_handler",
+                                "args": {
+                                    "command": "debugger-break"
+                                }
+                            },
+                            {
+                                "caption": "Continue",
+                                "command": "defold_command_handler",
+                                "args": {
+                                    "command": "debugger-continue"
+                                }
+                            },
+                            {
+                                "caption": "Step Into",
+                                "command": "defold_command_handler",
+                                "args": {
+                                    "command": "debugger-step-into"
+                                }
+                            },
+                            {
+                                "caption": "Step Over",
+                                "command": "defold_command_handler",
+                                "args": {
+                                    "command": "debugger-step-over"
+                                }
+                            },
+                            {
+                                "caption": "Step Out",
+                                "command": "defold_command_handler",
+                                "args": {
+                                    "command": "debugger-step-out"
+                                }
+                            },
+                            {
+                                "caption": "Detach",
+                                "command": "defold_command_handler",
+                                "args": {
+                                    "command": "debugger-detach"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "caption": "Extender Server",
+                        "children": [
+                            {
+                                "caption": "Start",
+                                "command": "defold_start_extender"
+                            },
+                            {
+                                "caption": "Stop",
+                                "command": "defold_stop_extender"
+                            },
+                            {
+                                "caption": "Restart",
+                                "command": "defold_restart_extender"
+                            }
+                        ]
+                    },
+                    {
+                        "caption": "-"
+                    },
+                    {
+                        "caption": "Check Status",
+                        "command": "defold_check_status"
+                    },
+                    {
+                        "caption": "-"
+                    },
+                    {
+                        "caption": "Settings",
+                        "command": "edit_settings",
+                        "args": {
+                            "base_file": "${packages}/Defold/Defold.sublime-settings",
+                            "default": "{\n\t$0\n}"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+]

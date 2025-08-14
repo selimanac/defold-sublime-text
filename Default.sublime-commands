@@ -1,0 +1,158 @@
+[
+    {
+        "caption": "Defold: Build",
+        "command": "defold_command_handler",
+        "args": {
+            "command": "build"
+        }
+    },
+    {
+        "caption": "Defold: Hot Reload",
+        "command": "defold_command_handler",
+        "args": {
+            "command": "hot-reload"
+        }
+    },
+    {
+        "caption": "Defold: Rebuild",
+        "command": "defold_command_handler",
+        "args": {
+            "command": "rebuild"
+        }
+    },
+    {
+        "caption": "Defold: Build HTML5",
+        "command": "defold_command_handler",
+        "args": {
+            "command": "build-html5"
+        }
+    },
+    {
+        "caption": "Defold: Rebundle",
+        "command": "defold_command_handler",
+        "args": {
+            "command": "rebundle"
+        }
+    },
+    {
+        "caption": "Defold: Fetch Libraries",
+        "command": "defold_command_handler",
+        "args": {
+            "command": "fetch-libraries"
+        }
+    },
+    {
+        "caption": "Defold: Asset Portal",
+        "command": "defold_command_handler",
+        "args": {
+            "command": "asset-portal"
+        }
+    },
+    {
+        "caption": "Defold: Documentation",
+        "command": "defold_command_handler",
+        "args": {
+            "command": "documentation"
+        }
+    },
+    {
+        "caption": "Defold: Support Forum",
+        "command": "defold_command_handler",
+        "args": {
+            "command": "support-forum"
+        }
+    },
+    {
+        "caption": "Defold: Issues",
+        "command": "defold_command_handler",
+        "args": {
+            "command": "issues"
+        }
+    },
+    {
+        "caption": "Defold: Report Issue",
+        "command": "defold_command_handler",
+        "args": {
+            "command": "report-issue"
+        }
+    },
+    {
+        "caption": "Defold: Report Suggestion",
+        "command": "defold_command_handler",
+        "args": {
+            "command": "report-suggestion"
+        }
+    },
+    {
+        "caption": "Defold: Debugger Start",
+        "command": "defold_command_handler",
+        "args": {
+            "command": "debugger-start"
+        }
+    },
+    {
+        "caption": "Defold: Debugger Stop",
+        "command": "defold_command_handler",
+        "args": {
+            "command": "debugger-stop"
+        }
+    },
+    {
+        "caption": "Defold: Debugger Break",
+        "command": "defold_command_handler",
+        "args": {
+            "command": "debugger-break"
+        }
+    },
+    {
+        "caption": "Defold: Debugger Continue",
+        "command": "defold_command_handler",
+        "args": {
+            "command": "debugger-continue"
+        }
+    },
+    {
+        "caption": "Defold: Debugger Step Into",
+        "command": "defold_command_handler",
+        "args": {
+            "command": "debugger-step-into"
+        }
+    },
+    {
+        "caption": "Defold: Debugger Step Over",
+        "command": "defold_command_handler",
+        "args": {
+            "command": "debugger-step-over"
+        }
+    },
+    {
+        "caption": "Defold: Debugger Step Out",
+        "command": "defold_command_handler",
+        "args": {
+            "command": "debugger-step-out"
+        }
+    },
+    {
+        "caption": "Defold: Debugger Detach",
+        "command": "defold_command_handler",
+        "args": {
+            "command": "debugger-detach"
+        }
+    },
+    {
+        "caption": "Defold: Start Extender Server",
+        "command": "defold_start_extender"
+    },
+    {
+        "caption": "Defold: Stop Extender Server",
+        "command": "defold_stop_extender"
+    },
+    {
+        "caption": "Defold: Restart Extender Server",
+        "command": "defold_restart_extender"
+    },
+    {
+        "caption": "Defold: Check Status",
+        "command": "defold_check_status"
+    }
+]

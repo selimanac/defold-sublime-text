@@ -1,0 +1,146 @@
+[
+    // Build commands
+    {
+        "keys": [
+            "ctrl+b",
+            "ctrl+b"
+        ],
+        "command": "defold_command_handler",
+        "args": {
+            "command": "build"
+        }
+    },
+    {
+        "keys": [
+            "ctrl+b",
+            "ctrl+h"
+        ],
+        "command": "defold_command_handler",
+        "args": {
+            "command": "hot-reload"
+        }
+    },
+    {
+        "keys": [
+            "ctrl+b",
+            "ctrl+r"
+        ],
+        "command": "defold_command_handler",
+        "args": {
+            "command": "rebuild"
+        }
+    },
+    {
+        "keys": [
+            "ctrl+b",
+            "ctrl+5"
+        ],
+        "command": "defold_command_handler",
+        "args": {
+            "command": "build-html5"
+        }
+    },
+    // Debugger commands
+    {
+        "keys": [
+            "ctrl+d",
+            "ctrl+s"
+        ],
+        "command": "defold_command_handler",
+        "args": {
+            "command": "debugger-start"
+        }
+    },
+    {
+        "keys": [
+            "ctrl+d",
+            "ctrl+x"
+        ],
+        "command": "defold_command_handler",
+        "args": {
+            "command": "debugger-stop"
+        }
+    },
+    {
+        "keys": [
+            "ctrl+d",
+            "ctrl+b"
+        ],
+        "command": "defold_command_handler",
+        "args": {
+            "command": "debugger-break"
+        }
+    },
+    {
+        "keys": [
+            "ctrl+d",
+            "ctrl+c"
+        ],
+        "command": "defold_command_handler",
+        "args": {
+            "command": "debugger-continue"
+        }
+    },
+    {
+        "keys": [
+            "ctrl+d",
+            "ctrl+i"
+        ],
+        "command": "defold_command_handler",
+        "args": {
+            "command": "debugger-step-into"
+        }
+    },
+    {
+        "keys": [
+            "ctrl+d",
+            "ctrl+o"
+        ],
+        "command": "defold_command_handler",
+        "args": {
+            "command": "debugger-step-over"
+        }
+    },
+    {
+        "keys": [
+            "ctrl+d",
+            "ctrl+u"
+        ],
+        "command": "defold_command_handler",
+        "args": {
+            "command": "debugger-step-out"
+        }
+    },
+    {
+        "keys": [
+            "ctrl+d",
+            "ctrl+d"
+        ],
+        "command": "defold_command_handler",
+        "args": {
+            "command": "debugger-detach"
+        }
+    },
+    // Extender server commands
+    {
+        "keys": [
+            "ctrl+e",
+            "ctrl+s"
+        ],
+        "command": "defold_start_extender"
+    },
+    {
+        "keys": [
+            "ctrl+e",
+            "ctrl+x"
+        ],
+        "command": "defold_stop_extender"
+    },
+    {
+        "keys": [
+            "ctrl+e",
+            "ctrl+r"
+        ],
+        "command": "defold_restart_extender"
+    }
+]
