@@ -13,6 +13,17 @@ A Sublime Text package for controlling the Defold Editor using its HTTP API and 
 
 ## Installation
 
+
+**This package requires Sublime Text 4 build 4200 or newer**
+
+This package was specifically designed for the latest features in Sublime Text 4 (build 4200+) and will not work with earlier versions.
+
+You can enable Python 3.8 support by adding the following to your (Settings->Settings) Preferences.sublime-settings file:
+
+```json
+"disable_plugin_host_3.3": true
+```
+
 ### Manual Installation
 
 1. Clone this repository or download the ZIP
@@ -24,6 +35,9 @@ A Sublime Text package for controlling the Defold Editor using its HTTP API and 
 ### Package Control
 
 *Coming soon*
+
+
+
 
 ## Configuration
 

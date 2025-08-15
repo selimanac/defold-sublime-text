@@ -7,6 +7,7 @@ import threading
 import time
 import os
 import re
+from typing import Dict, Optional, Any, List, Union, Callable, Tuple
 
 class DefoldConsole:
     _instance = None
@@ -18,17 +19,17 @@ class DefoldConsole:
         return cls._instance
     
     def __init__(self):
-        self.panel = None
-        self.auto_refresh = False
-        self.refresh_thread = None
+        self.panel: Optional[sublime.View] = None
+        self.auto_refresh: bool = False
+        self.refresh_thread: Optional[threading.Thread] = None
         # Get refresh interval from settings with fallback to 2.0 seconds
         settings = sublime.load_settings("Defold.sublime-settings")
-        self.refresh_interval = settings.get("console_refresh_interval", 2.0)  
+        self.refresh_interval: float = settings.get("console_refresh_interval", 2.0)  
         self.panel_lock = threading.Lock()
-        self.phantom_set = None  # Restore phantom set
-        self.resource_regions = {}  # Store resource regions for navigation
+        self.phantom_set: Optional[sublime.PhantomSet] = None  # Restore phantom set
+        self.resource_regions: Dict[str, Dict[str, Union[str, int]]] = {}  # Store resource regions for navigation
     
-    def get_panel(self, window):
+    def get_panel(self, window: sublime.Window) -> sublime.View:
         """Get or create the console output panel"""
         if not self.panel:
             self.panel = window.create_output_panel("defold_console")
@@ -41,25 +42,24 @@ class DefoldConsole:
             self.phantom_set = sublime.PhantomSet(self.panel, "defold_resource_links")
         return self.panel
     
-    def fetch_console(self, port):
+    def fetch_console(self, port: Optional[int]) -> Optional[Dict]:
         """Fetch console data from the editor"""
         if not port:
             return None
             
         try:
-            url = "http://localhost:{}/console".format(port)
+            url = f"http://localhost:{port}/console"
             req = urllib.request.Request(url)
             with urllib.request.urlopen(req) as response:
                 data = json.loads(response.read().decode('utf-8'))
                 return data
         except Exception as e:
-            print("Error fetching console data: {}".format(e))
+            print(f"Error fetching console data: {e}")
             return None
 
-    def update_panel(self, window, port):
+    def update_panel(self, window: sublime.Window, port: Optional[int]) -> bool:
         """Update the console panel with data from the editor"""
-        data = self.fetch_console(port)
-        if not data:
+        if not (data := self.fetch_console(port)):
             return False
             
         with self.panel_lock:
@@ -96,7 +96,7 @@ class DefoldConsole:
             
         return True
         
-    def add_clickable_resources(self, window, view):
+    def add_clickable_resources(self, window: sublime.Window, view: sublime.View) -> None:
         """Add clickable phantoms over resource references"""
         # Get all resource regions
         resource_regions = view.get_regions("defold_resource")
@@ -130,7 +130,7 @@ class DefoldConsole:
                     pass
             
             # Create a phantom with a click handler
-            html = '<a href="open:{}">▶</a>'.format(text)
+            html = f'<a href="open:{text}">▶</a>'
             phantom = sublime.Phantom(
                 region,
                 html,
@@ -144,28 +144,27 @@ class DefoldConsole:
         if self.phantom_set:
             self.phantom_set.update(phantoms)
     
-    def open_file(self, project_path, file_path, line_number=None):
+    def open_file(self, project_path: str, file_path: str, line_number: Optional[int] = None) -> None:
         """Open a file at the given line number"""
         try:
-            window = sublime.active_window()
-            if not window:
+            if not (window := sublime.active_window()):
                 print("No active window")
                 return
                 
             full_path = os.path.normpath(os.path.join(project_path, file_path))
             
-            print("Opening file: {}".format(full_path))
+            print(f"Opening file: {full_path}")
             if line_number is not None:
-                print("At line: {}".format(line_number))
-                target = "{}:{}".format(full_path, line_number)
+                print(f"At line: {line_number}")
+                target = f"{full_path}:{line_number}"
                 window.open_file(target, sublime.ENCODED_POSITION)
             else:
                 window.open_file(full_path)
                 
         except Exception as e:
-            print("Error opening file: {}".format(e))
+            print(f"Error opening file: {e}")
     
-    def start_auto_refresh(self, window, port):
+    def start_auto_refresh(self, window: sublime.Window, port: Optional[int]) -> None:
         """Start auto-refreshing the console"""
         if self.refresh_thread and self.refresh_thread.is_alive():
             return  # Already running
@@ -176,7 +175,7 @@ class DefoldConsole:
             
         self.auto_refresh = True
         
-        def refresh_loop():
+        def refresh_loop() -> None:
             while self.auto_refresh:
                 sublime.set_timeout(lambda: self.update_panel(window, port), 0)
                 time.sleep(self.refresh_interval)
@@ -185,19 +184,19 @@ class DefoldConsole:
         self.refresh_thread.daemon = True
         self.refresh_thread.start()
     
-    def stop_auto_refresh(self):
+    def stop_auto_refresh(self) -> None:
         """Stop auto-refreshing the console"""
         self.auto_refresh = False
         if self.refresh_thread:
             self.refresh_thread.join(timeout=1.0)
             self.refresh_thread = None
     
-    def add_resource_region(self, region, resource_path, line_number=None):
+    def add_resource_region(self, region: sublime.Region, resource_path: str, line_number: Optional[int] = None) -> None:
         """Store resource region for navigation"""
-        key = "{},{}".format(region.a, region.b)
+        key = f"{region.a},{region.b}"
         self.resource_regions[key] = {"path": resource_path, "line": line_number}
     
-    def get_resource_at_point(self, point):
+    def get_resource_at_point(self, point: int) -> Optional[Dict[str, Union[str, int]]]:
         """Get resource info at the given point"""
         for region_str, info in self.resource_regions.items():
             start, end = map(int, region_str.split(','))
@@ -205,3 +204,79 @@ class DefoldConsole:
             if region.contains(point):
                 return info
         return None
+
+class DefoldUpdateConsoleContentCommand(sublime_plugin.TextCommand):
+    def run(self, edit: sublime.Edit, lines: List[str], regions: List[Dict], auto_scroll: bool = True) -> None:
+        """Update the console content with new lines and regions"""
+        view = self.view
+        
+        # Clear the view
+        view.erase(edit, sublime.Region(0, view.size()))
+        
+        # Insert the new lines
+        for line in lines:
+            view.insert(edit, view.size(), line + '\n')
+            
+        # Process regions to find resource references
+        resource_regions = []
+        for region in regions:
+            from_row = region["from"]["row"]
+            from_col = region["from"]["col"]
+            to_row = region["to"]["row"]
+            to_col = region["to"]["col"]
+            region_type = region["type"]
+            
+            # Look for resource references
+            if region_type == "resource-reference" and "proj-path-candidates" in region:
+                # Get region bounds in the view
+                start_point = view.text_point(from_row, from_col)
+                end_point = view.text_point(to_row, to_col)
+                region_obj = sublime.Region(start_point, end_point)
+                resource_regions.append(region_obj)
+                
+                # Get the resource path
+                resource_text = view.substr(region_obj)
+                
+                # Check if there's a line number
+                line_number = None
+                if "row" in region:
+                    line_number = region["row"]
+                
+                # Store resource reference for navigation
+                console = DefoldConsole.instance()
+                console.add_resource_region(region_obj, resource_text, line_number)
+        
+        # Add regions for resource references
+        view.add_regions("defold_resource", resource_regions, "string", "bookmark", 
+                        sublime.DRAW_NO_FILL | sublime.DRAW_NO_OUTLINE)
+                
+        # Scroll to the end if requested
+        if auto_scroll:
+            view.show(view.size())
+
+class DefoldShowConsoleCommand(sublime_plugin.WindowCommand):
+    def run(self) -> None:
+        """Show the Defold console panel"""
+        from .defold import DefoldManager
+        window = self.window
+        console = DefoldConsole.instance()
+        panel = console.get_panel(window)
+        
+        # Show the panel
+        window.run_command("show_panel", {"panel": "output.defold_console"})
+        
+        # Get the current port and refresh the console
+        port = DefoldManager.instance().get_current_port()
+        if port:
+            console.update_panel(window, port)
+            console.start_auto_refresh(window, port)
+
+class DefoldRefreshConsoleCommand(sublime_plugin.WindowCommand):
+    def run(self) -> None:
+        """Manually refresh the console content"""
+        from .defold import DefoldManager
+        window = self.window
+        console = DefoldConsole.instance()
+        port = DefoldManager.instance().get_current_port()
+        if port:
+            console.update_panel(window, port)
