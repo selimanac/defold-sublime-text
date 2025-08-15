@@ -11,6 +11,7 @@ A Sublime Text package for controlling the Defold Editor using its HTTP API and 
 - Support for all Defold Editor commands
 - Key bindings for common operations
 - Defold Lua API annotations for code completion and documentation
+- Performance-optimized console with automatic resource linking
 
 ## Installation
 
@@ -48,6 +49,7 @@ Key settings:
 - `auto_start_extender`: Whether to automatically start the extender server (default: false)
 - `console_refresh_interval`: How often the console should refresh, in seconds (default: 2.0)
 - `auto_check_annotations`: Whether to automatically check for Defold API annotation updates on startup (default: true)
+- `console_max_lines`: Maximum number of lines to show in console to prevent slowdown (default: 1000)
 
 Example configuration:
 
@@ -57,7 +59,8 @@ Example configuration:
     "extender_server_script": "/path/to/extender/server/scripts/standalone/service-standalone.sh",
     "auto_start_extender": true,
     "console_refresh_interval": 1.5,
-    "auto_check_annotations": true
+    "auto_check_annotations": true,
+    "console_max_lines": 1000
 }
 ```
 
@@ -92,6 +95,21 @@ This package includes support for Defold Lua API annotations that enhance code c
 
 ### Usage:
 The package will automatically check for annotation updates on startup (if `auto_check_annotations` is enabled). You can also manually check for updates through the menu: `Tools > Defold > Annotations > Check for Updates`.
+
+## Console Features
+
+The console view shows output from the Defold Editor with several optimizations:
+
+- **Clickable File References**: Click on the triangles (▶) next to file paths to jump directly to that file and line number
+- **Performance Optimizations**: 
+  - Only refreshes when visible to conserve resources
+  - Automatically limits the number of lines shown (configurable via `console_max_lines`)
+  - Provides a "Clear Console" command for manual cleanup
+
+### Console Commands
+- **Show Console**: Display the Defold console panel
+- **Refresh Console**: Manually refresh the console content
+- **Clear Console**: Clear all content from the console
 
 ## Key Bindings
 ### Build Commands
@@ -146,10 +164,6 @@ For example, to change the Hot Reload shortcut to `Ctrl+Shift+R`:
     }
 ]
 ```
-
-## Console Usage
-
-The console view shows output from the Defold Editor with clickable file references. Click on the triangles (▶) next to file paths to jump directly to that file and line number.
 
 ## Commands
 
