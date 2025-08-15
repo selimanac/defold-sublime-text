@@ -92,11 +92,12 @@ You should set the `default_port` to match this value (8181 in the example).
 
 ## Customizing Key Bindings
 
-To customize key bindings, create a new keymap file in your User packages directory and add your custom bindings:
+To customize key bindings:
 
-1. Open the Default.sublime-keymap file in the Defold package to see the default bindings
-2. Create or edit your User keymap file (Preferences -> Key Bindings)
-3. Add your custom bindings to override the defaults
+1. Open `Preferences -> Key Bindings`
+2. Copy the bindings you want to modify from Default.sublime-keymap
+3. Paste them into the right panel (User key bindings)
+4. Modify them as needed
 
 For example, to change the Hot Reload shortcut to `Ctrl+Shift+R`:
 
