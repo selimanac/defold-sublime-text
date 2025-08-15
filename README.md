@@ -27,13 +27,14 @@ A Sublime Text package for controlling the Defold Editor using its HTTP API and 
 
 ## Configuration
 
-Configure the package through the menu: `Tools > Defold > Preferences > Settings`
+Configure the package through the menu: `Tools > Defold > Settings`
 
 Key settings:
 
 - `default_port`: Port to use when `.internal/editor.port` is not available (default: null)
 - `extender_server_script`: Path to the extender server script (default: "")
 - `auto_start_extender`: Whether to automatically start the extender server (default: false)
+- `console_refresh_interval`: How often the console should refresh, in seconds (default: 2.0)
 
 Example configuration:
 
@@ -41,5 +42,69 @@ Example configuration:
 {
     "default_port": 9000,
     "extender_server_script": "/path/to/extender/server/scripts/standalone/service-standalone.sh",
-    "auto_start_extender": true
+    "auto_start_extender": true,
+    "console_refresh_interval": 1.5
 }
+```
+
+## Key Bindings
+### Build Commands
+
+- **Ctrl+B, Ctrl+B**: Build
+- **Ctrl+B, Ctrl+H**: Hot Reload
+- **Ctrl+B, Ctrl+R**: Rebuild
+- **Ctrl+B, Ctrl+5**: Build HTML5
+
+### Debugger Commands
+
+- **Ctrl+D, Ctrl+S**: Debugger Start
+- **Ctrl+D, Ctrl+X**: Debugger Stop
+- **Ctrl+D, Ctrl+B**: Debugger Break
+- **Ctrl+D, Ctrl+C**: Debugger Continue
+- **Ctrl+D, Ctrl+I**: Debugger Step Into
+- **Ctrl+D, Ctrl+O**: Debugger Step Over
+- **Ctrl+D, Ctrl+U**: Debugger Step Out
+- **Ctrl+D, Ctrl+D**: Debugger Detach
+
+### Extender Server Commands
+
+- **Ctrl+E, Ctrl+S**: Start Extender Server
+- **Ctrl+E, Ctrl+X**: Stop Extender Server
+- **Ctrl+E, Ctrl+R**: Restart Extender Server
+
+### Console Commands
+
+- **Ctrl+D, Ctrl+C**: Show Console
+
+## Customizing Key Bindings
+
+To customize key bindings, copy the desired bindings from the Default.sublime-keymap file and modify them in your User keymap file:
+
+1. Go to `Preferences > Package Settings > Defold > Key Bindings`
+2. Copy the bindings you want to modify
+3. Open `Preferences > Key Bindings`
+4. Paste and modify the bindings in the User keymap file
+
+For example, to change the Hot Reload shortcut to `Ctrl+Shift+R`:
+
+```json
+[
+    {
+        "keys": [
+            "ctrl+shift+r"
+        ],
+        "command": "defold_command_handler",
+        "args": {
+            "command": "hot-reload"
+        }
+    }
+]
+```
+
+## Console Usage
+
+The console view shows output from the Defold Editor with clickable file references. Click on the triangles (▶) next to file paths to jump directly to that file and line number.
+
+## Commands
+
+All Defold commands are available through the Command Palette (`Ctrl+Shift+P` or `Cmd+Shift+P`) and the `Tools > Defold` menu.
