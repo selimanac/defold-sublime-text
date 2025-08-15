@@ -1,0 +1,14 @@
+# Defold annotations folder - downloaded content
+annotations/
+annotations.zip
+annotations/*.zip
+annotations/version.txt
+
+# Potential temporary files
+*.tmp
+*.temp
+*.bak
+
+# System files
+.DS_Store
+Thumbs.db
