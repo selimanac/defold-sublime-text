@@ -10,6 +10,7 @@ A Sublime Text package for controlling the Defold Editor using its HTTP API and 
 - Monitor `.internal/editor.port` file changes automatically
 - Support for all Defold Editor commands
 - Key bindings for common operations
+- Defold Lua API annotations for code completion and documentation
 
 ## Installation
 
@@ -46,6 +47,7 @@ Key settings:
 - `extender_server_script`: Path to the extender server script (default: "")
 - `auto_start_extender`: Whether to automatically start the extender server (default: false)
 - `console_refresh_interval`: How often the console should refresh, in seconds (default: 2.0)
+- `auto_check_annotations`: Whether to automatically check for Defold API annotation updates on startup (default: true)
 
 Example configuration:
 
@@ -54,7 +56,8 @@ Example configuration:
     "default_port": 8181,
     "extender_server_script": "/path/to/extender/server/scripts/standalone/service-standalone.sh",
     "auto_start_extender": true,
-    "console_refresh_interval": 1.5
+    "console_refresh_interval": 1.5,
+    "auto_check_annotations": true
 }
 ```
 
@@ -71,6 +74,24 @@ Example configuration:
 ```
 
 You should set the `default_port` to match this value (8181 in the example).
+
+## Lua API Annotations
+
+This package includes support for Defold Lua API annotations that enhance code completion, hover documentation, and other LSP features when editing Defold script files.
+
+### Features:
+- Automatic download and setup of Defold API annotations
+- Integration with LSP-lua package
+- Code completion for Defold API functions
+- Documentation on hover
+- Type checking for Defold API
+
+### Requirements:
+- LSP-lua package must be installed
+- Sublime LSP must be enabled
+
+### Usage:
+The package will automatically check for annotation updates on startup (if `auto_check_annotations` is enabled). You can also manually check for updates through the menu: `Tools > Defold > Annotations > Check for Updates`.
 
 ## Key Bindings
 ### Build Commands
