@@ -1,10 +1,10 @@
 {
     // Default port to use when .internal/editor.port is not available
     "default_port": null,
-    
     // Path to the extender server script
     "extender_server_script": "/path/to/extender/server/scripts/standalone/service-standalone.sh",
-    
     // Automatically start the extender server when a Defold project is opened
-    "auto_start_extender": false
+    "auto_start_extender": false,
+    // Interval in seconds for refreshing console content
+    "console_refresh_interval": 2.0
 }
