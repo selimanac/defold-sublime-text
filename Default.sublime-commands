@@ -84,6 +84,76 @@
         }
     },
     {
+        "caption": "Defold: Editor Logs",
+        "command": "defold_command_handler",
+        "args": {
+            "command": "editor-logs"
+        }
+    },
+    {
+        "caption": "Defold: Engine Profiler",
+        "command": "defold_command_handler",
+        "args": {
+            "command": "engine-profiler"
+        }
+    },
+    {
+        "caption": "Defold: Engine Resource Profiler",
+        "command": "defold_command_handler",
+        "args": {
+            "command": "engine-resource-profiler"
+        }
+    },
+    {
+        "caption": "Defold: Reload Extensions",
+        "command": "defold_command_handler",
+        "args": {
+            "command": "reload-extensions"
+        }
+    },
+    {
+        "caption": "Defold: Reload Stylesheets",
+        "command": "defold_command_handler",
+        "args": {
+            "command": "reload-stylesheets"
+        }
+    },
+    {
+        "caption": "Defold: Show Build Errors",
+        "command": "defold_command_handler",
+        "args": {
+            "command": "show-build-errors"
+        }
+    },
+    {
+        "caption": "Defold: Show Curve Editor",
+        "command": "defold_command_handler",
+        "args": {
+            "command": "show-curve-editor"
+        }
+    },
+    {
+        "caption": "Defold: Toggle Bottom Pane",
+        "command": "defold_command_handler",
+        "args": {
+            "command": "toggle-pane-bottom"
+        }
+    },
+    {
+        "caption": "Defold: Toggle Left Pane",
+        "command": "defold_command_handler",
+        "args": {
+            "command": "toggle-pane-left"
+        }
+    },
+    {
+        "caption": "Defold: Toggle Right Pane",
+        "command": "defold_command_handler",
+        "args": {
+            "command": "toggle-pane-right"
+        }
+    },
+    {
         "caption": "Defold: Debugger Start",
         "command": "defold_command_handler",
         "args": {
@@ -155,7 +225,6 @@
         "caption": "Defold: Check Status",
         "command": "defold_check_status"
     },
-    // Console commands
     {
         "caption": "Defold: Show Console",
         "command": "defold_show_console"

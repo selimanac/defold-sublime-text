@@ -51,6 +51,13 @@
                                 "args": {
                                     "command": "fetch-libraries"
                                 }
+                            },
+                            {
+                                "caption": "Show Build Errors",
+                                "command": "defold_command_handler",
+                                "args": {
+                                    "command": "show-build-errors"
+                                }
                             }
                         ]
                     },
@@ -133,11 +140,134 @@
                         ]
                     },
                     {
+                        "caption": "Editor UI",
+                        "children": [
+                            {
+                                "caption": "Toggle Bottom Pane",
+                                "command": "defold_command_handler",
+                                "args": {
+                                    "command": "toggle-pane-bottom"
+                                }
+                            },
+                            {
+                                "caption": "Toggle Left Pane",
+                                "command": "defold_command_handler",
+                                "args": {
+                                    "command": "toggle-pane-left"
+                                }
+                            },
+                            {
+                                "caption": "Toggle Right Pane",
+                                "command": "defold_command_handler",
+                                "args": {
+                                    "command": "toggle-pane-right"
+                                }
+                            },
+                            {
+                                "caption": "Show Curve Editor",
+                                "command": "defold_command_handler",
+                                "args": {
+                                    "command": "show-curve-editor"
+                                }
+                            },
+                            {
+                                "caption": "Reload Extensions",
+                                "command": "defold_command_handler",
+                                "args": {
+                                    "command": "reload-extensions"
+                                }
+                            },
+                            {
+                                "caption": "Reload Stylesheets",
+                                "command": "defold_command_handler",
+                                "args": {
+                                    "command": "reload-stylesheets"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "caption": "Tools",
+                        "children": [
+                            {
+                                "caption": "Engine Profiler",
+                                "command": "defold_command_handler",
+                                "args": {
+                                    "command": "engine-profiler"
+                                }
+                            },
+                            {
+                                "caption": "Engine Resource Profiler",
+                                "command": "defold_command_handler",
+                                "args": {
+                                    "command": "engine-resource-profiler"
+                                }
+                            },
+                            {
+                                "caption": "Editor Logs",
+                                "command": "defold_command_handler",
+                                "args": {
+                                    "command": "editor-logs"
+                                }
+                            }
+                        ]
+                    },
+                    {
                         "caption": "-"
                     },
                     {
                         "caption": "Check Status",
                         "command": "defold_check_status"
+                    },
+                    {
+                        "caption": "-"
+                    },
+                    {
+                        "caption": "Online Resources",
+                        "children": [
+                            {
+                                "caption": "Asset Portal",
+                                "command": "defold_command_handler",
+                                "args": {
+                                    "command": "asset-portal"
+                                }
+                            },
+                            {
+                                "caption": "Documentation",
+                                "command": "defold_command_handler",
+                                "args": {
+                                    "command": "documentation"
+                                }
+                            },
+                            {
+                                "caption": "Support Forum",
+                                "command": "defold_command_handler",
+                                "args": {
+                                    "command": "support-forum"
+                                }
+                            },
+                            {
+                                "caption": "Issues",
+                                "command": "defold_command_handler",
+                                "args": {
+                                    "command": "issues"
+                                }
+                            },
+                            {
+                                "caption": "Report Issue",
+                                "command": "defold_command_handler",
+                                "args": {
+                                    "command": "report-issue"
+                                }
+                            },
+                            {
+                                "caption": "Report Suggestion",
+                                "command": "defold_command_handler",
+                                "args": {
+                                    "command": "report-suggestion"
+                                }
+                            }
+                        ]
                     },
                     {
                         "caption": "-"
