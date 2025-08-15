@@ -13,7 +13,6 @@ A Sublime Text package for controlling the Defold Editor using its HTTP API and 
 
 ## Installation
 
-
 **This package requires Sublime Text 4 build 4200 or newer**
 
 This package was specifically designed for the latest features in Sublime Text 4 (build 4200+) and will not work with earlier versions.
@@ -35,8 +34,6 @@ You can enable Python 3.8 support by adding the following to your (Settings->Set
 ### Package Control
 
 *Coming soon*
-
-
 
 
 ## Configuration
@@ -109,7 +106,7 @@ You should set the `default_port` to match this value (8181 in the example).
 To customize key bindings:
 
 1. Open `Preferences -> Key Bindings`
-2. Copy the bindings you want to modify from Default.sublime-keymap
+2. Copy the bindings you want to modify from [Default.sublime-keymap](https://github.com/selimanac/defold-sublime-text/blob/d8267f2cb9ad68c97cc60a95d2cab53b53e33801/Default.sublime-keymap)
 3. Paste them into the right panel (User key bindings)
 4. Modify them as needed
 
