@@ -294,8 +294,8 @@ def plugin_loaded():
         "extender_server_script": "",
         "auto_start_extender": False,
         "console_refresh_interval": 2.0,
-        "auto_check_annotations": True,  # New setting
-        "last_annotations_check": None   # New setting
+        "auto_check_annotations": True,  
+        "last_annotations_check": None  
     }
     
     settings = sublime.load_settings("Defold.sublime-settings")

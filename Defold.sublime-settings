@@ -6,5 +6,7 @@
     // Automatically start the extender server when a Defold project is opened
     "auto_start_extender": false,
     // Interval in seconds for refreshing console content
-    "console_refresh_interval": 2.0
+    "console_refresh_interval": 2.0,
+    // Automatically check for annotation updates on startup
+    "auto_check_annotations": true
 }
