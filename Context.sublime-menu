@@ -1,0 +1,9 @@
+[
+    {
+        "caption": "-"
+    },
+    {
+        "caption": "Open Resource Reference",
+        "command": "defold_open_resource"
+    }
+]
