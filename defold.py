@@ -6,6 +6,7 @@ import threading
 import time
 import urllib.request
 import urllib.error
+from datetime import datetime  # Add this import
 from typing import Dict, Optional, Any, List, Tuple
 
 class DefoldManager(sublime_plugin.EventListener):
@@ -284,7 +285,7 @@ class DefoldCheckStatusCommand(sublime_plugin.WindowCommand):
         
         sublime.message_dialog("\n".join(message))
 
-def plugin_loaded() -> None:
+def plugin_loaded():
     print("Defold plugin loaded")
     
     # Ensure we have default settings
@@ -292,7 +293,9 @@ def plugin_loaded() -> None:
         "default_port": None,
         "extender_server_script": "",
         "auto_start_extender": False,
-        "console_refresh_interval": 2.0
+        "console_refresh_interval": 2.0,
+        "auto_check_annotations": True,  # New setting
+        "last_annotations_check": None   # New setting
     }
     
     settings = sublime.load_settings("Defold.sublime-settings")
@@ -300,6 +303,27 @@ def plugin_loaded() -> None:
         if settings.get(key) is None:
             settings.set(key, value)
     sublime.save_settings("Defold.sublime-settings")
+    
+    # Auto-check for annotations if enabled
+    if settings.get("auto_check_annotations", True):
+        # Only check once per day
+        last_check = settings.get("last_annotations_check")
+        current_time = datetime.now().strftime("%Y-%m-%d")
+        
+        if not last_check or last_check != current_time:
+            # Import here to avoid circular imports
+            from .defold_annotations import DefoldAnnotationsManager
+            
+            def on_check_complete(message, version):
+                if version:  # Only update if a new version was found
+                    settings.set("last_annotations_check", current_time)
+                    sublime.save_settings("Defold.sublime-settings")
+            
+            # Delay the check to allow the editor to finish loading
+            sublime.set_timeout(
+                lambda: DefoldAnnotationsManager.check_and_update(on_check_complete), 
+                5000  # 5 seconds delay
+            )
 
 def plugin_unloaded() -> None:
     print("Defold plugin unloaded")

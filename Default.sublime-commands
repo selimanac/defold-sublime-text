@@ -163,5 +163,9 @@
     {
         "caption": "Defold: Refresh Console",
         "command": "defold_refresh_console"
+    },
+    {
+        "caption": "Defold: Check for Annotation Updates",
+        "command": "defold_check_annotations"
     }
 ]

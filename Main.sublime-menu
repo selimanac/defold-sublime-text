@@ -165,6 +165,18 @@
                                 "command": "defold_refresh_console"
                             }
                         ]
+                    },
+                    {
+                        "caption": "-"
+                    },
+                    {
+                        "caption": "Annotations",
+                        "children": [
+                            {
+                                "caption": "Check for Updates",
+                                "command": "defold_check_annotations"
+                            }
+                        ]
                     }
                 ]
             }
