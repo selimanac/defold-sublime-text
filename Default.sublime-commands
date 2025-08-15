@@ -165,6 +165,10 @@
         "command": "defold_refresh_console"
     },
     {
+        "caption": "Defold: Clear Console",
+        "command": "defold_clear_console"
+    },
+    {
         "caption": "Defold: Check for Annotation Updates",
         "command": "defold_check_annotations"
     }

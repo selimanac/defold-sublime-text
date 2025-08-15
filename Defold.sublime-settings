@@ -8,5 +8,7 @@
     // Interval in seconds for refreshing console content
     "console_refresh_interval": 2.0,
     // Automatically check for annotation updates on startup
-    "auto_check_annotations": true
+    "auto_check_annotations": true,
+    // Maximum number of lines to show in console (prevents slowdown)
+    "console_max_lines": 1000
 }

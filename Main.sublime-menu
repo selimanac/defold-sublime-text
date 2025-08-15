@@ -163,6 +163,10 @@
                             {
                                 "caption": "Refresh Console",
                                 "command": "defold_refresh_console"
+                            },
+                            {
+                                "caption": "Clear Console",
+                                "command": "defold_clear_console"
                             }
                         ]
                     },

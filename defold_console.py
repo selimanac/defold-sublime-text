@@ -26,8 +26,10 @@ class DefoldConsole:
         settings = sublime.load_settings("Defold.sublime-settings")
         self.refresh_interval: float = settings.get("console_refresh_interval", 2.0)  
         self.panel_lock = threading.Lock()
-        self.phantom_set: Optional[sublime.PhantomSet] = None  # Restore phantom set
-        self.resource_regions: Dict[str, Dict[str, Union[str, int]]] = {}  # Store resource regions for navigation
+        self.phantom_set: Optional[sublime.PhantomSet] = None
+        self.resource_regions: Dict[str, Dict[str, Union[str, int]]] = {}
+        # Add a max lines setting
+        self.max_lines: int = settings.get("console_max_lines", 1000)
     
     def get_panel(self, window: sublime.Window) -> sublime.View:
         """Get or create the console output panel"""
@@ -57,8 +59,22 @@ class DefoldConsole:
             print(f"Error fetching console data: {e}")
             return None
 
+    def is_console_visible(self, window: sublime.Window) -> bool:
+        """Check if the console panel is currently visible"""
+        if not window:
+            return False
+        
+        # Get all visible panels in the window
+        visible_panels = window.panels()
+        return "output.defold_console" in visible_panels
+    
     def update_panel(self, window: sublime.Window, port: Optional[int]) -> bool:
         """Update the console panel with data from the editor"""
+        # Check if the console is visible before fetching data
+        if not self.is_console_visible(window):
+            # Console not visible, don't waste resources
+            return False
+            
         if not (data := self.fetch_console(port)):
             return False
             
@@ -78,9 +94,25 @@ class DefoldConsole:
             
             # Clear previous resource regions
             self.resource_regions = {}
+            
+            # Limit the number of lines to display
+            lines = data.get("lines", [])
+            if len(lines) > self.max_lines:
+                lines = lines[-self.max_lines:]
+                # Add a note at the beginning indicating lines were truncated
+                lines.insert(0, f"[Defold Console] Output truncated. Showing last {self.max_lines} lines.")
+            
+            # Filter regions to match our limited lines
+            regions = []
+            if data.get("regions"):
+                for region in data.get("regions", []):
+                    from_row = region.get("from", {}).get("row", 0)
+                    if from_row < len(lines):
+                        regions.append(region)
+            
             panel.run_command("defold_update_console_content", {
-                "lines": data.get("lines", []),
-                "regions": data.get("regions", []),
+                "lines": lines,
+                "regions": regions,
                 "auto_scroll": last_line_visible
             })
             
@@ -172,12 +204,15 @@ class DefoldConsole:
         # Update refresh interval from settings
         settings = sublime.load_settings("Defold.sublime-settings")
         self.refresh_interval = settings.get("console_refresh_interval", 2.0)
+        self.max_lines = settings.get("console_max_lines", 1000)
             
         self.auto_refresh = True
         
         def refresh_loop() -> None:
             while self.auto_refresh:
-                sublime.set_timeout(lambda: self.update_panel(window, port), 0)
+                # Only update if the console is visible
+                if window and self.is_console_visible(window):
+                    sublime.set_timeout(lambda: self.update_panel(window, port), 0)
                 time.sleep(self.refresh_interval)
         
         self.refresh_thread = threading.Thread(target=refresh_loop)
@@ -220,11 +255,11 @@ class DefoldUpdateConsoleContentCommand(sublime_plugin.TextCommand):
         # Process regions to find resource references
         resource_regions = []
         for region in regions:
-            from_row = region["from"]["row"]
-            from_col = region["from"]["col"]
-            to_row = region["to"]["row"]
-            to_col = region["to"]["col"]
-            region_type = region["type"]
+            from_row = region.get("from", {}).get("row", 0)
+            from_col = region.get("from", {}).get("col", 0)
+            to_row = region.get("to", {}).get("row", 0)
+            to_col = region.get("to", {}).get("col", 0)
+            region_type = region.get("type", "")
             
             # Look for resource references
             if region_type == "resource-reference" and "proj-path-candidates" in region:
@@ -240,7 +275,7 @@ class DefoldUpdateConsoleContentCommand(sublime_plugin.TextCommand):
                 # Check if there's a line number
                 line_number = None
                 if "row" in region:
-                    line_number = region["row"]
+                    line_number = region.get("row")
                 
                 # Store resource reference for navigation
                 console = DefoldConsole.instance()
@@ -280,3 +315,16 @@ class DefoldRefreshConsoleCommand(sublime_plugin.WindowCommand):
         port = DefoldManager.instance().get_current_port()
         if port:
             console.update_panel(window, port)
+
+# Add the Clear Console command
+class DefoldClearConsoleCommand(sublime_plugin.WindowCommand):
+    def run(self) -> None:
+        """Clear the console content"""
+        console = DefoldConsole.instance()
+        panel = console.get_panel(self.window)
+        panel.run_command("defold_update_console_content", {
+            "lines": [],
+            "regions": [],
+            "auto_scroll": True
+        })
+        print("Defold console cleared")
