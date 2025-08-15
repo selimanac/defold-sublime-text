@@ -82,6 +82,8 @@ You should set the `default_port` to match this value (8181 in the example).
 
 This package includes support for Defold Lua API annotations that enhance code completion, hover documentation, and other LSP features when editing Defold script files.
 
+Annotations are provided by [astrochili's defold-annotations](https://github.com/astrochili/defold-annotations) project. Special thanks to [@astrochili](https://github.com/astrochili) for creating and maintaining this excellent resource.
+
 ### Features:
 - Automatic download and setup of Defold API annotations
 - Integration with LSP-lua package
