@@ -1,4 +1,4 @@
-# Defold Sublime Package
+# Defold Sublime Text Package
 
 A Sublime Text package for controlling the Defold Editor using its HTTP API and managing the Defold extender server.
 
@@ -31,7 +31,7 @@ Configure the package through the menu: `Tools > Defold > Settings`
 
 Key settings:
 
-- `default_port`: Port to use when `.internal/editor.port` is not available (default: null)
+- `default_port`: Override the auto-detected port. Only use this if you've launched Defold with a custom port using the `--port` parameter (default: null)
 - `extender_server_script`: Path to the extender server script (default: "")
 - `auto_start_extender`: Whether to automatically start the extender server (default: false)
 - `console_refresh_interval`: How often the console should refresh, in seconds (default: 2.0)
@@ -40,12 +40,26 @@ Example configuration:
 
 ```json
 {
-    "default_port": 9000,
+    "default_port": 8181,
     "extender_server_script": "/path/to/extender/server/scripts/standalone/service-standalone.sh",
     "auto_start_extender": true,
     "console_refresh_interval": 1.5
 }
 ```
+
+**Note about port setting:** If you've launched Defold Editor with a custom port like:
+```
+# on Windows
+.\Defold.exe --port 8181
+
+# on Linux:
+./Defold --port 8181
+
+# on macOS:
+./Defold.app/Contents/MacOS/Defold --port 8181
+```
+
+You should set the `default_port` to match this value (8181 in the example).
 
 ## Key Bindings
 ### Build Commands
@@ -78,12 +92,11 @@ Example configuration:
 
 ## Customizing Key Bindings
 
-To customize key bindings, copy the desired bindings from the Default.sublime-keymap file and modify them in your User keymap file:
+To customize key bindings, create a new keymap file in your User packages directory and add your custom bindings:
 
-1. Go to `Preferences > Package Settings > Defold > Key Bindings`
-2. Copy the bindings you want to modify
-3. Open `Preferences > Key Bindings`
-4. Paste and modify the bindings in the User keymap file
+1. Open the Default.sublime-keymap file in the Defold package to see the default bindings
+2. Create or edit your User keymap file (Preferences -> Key Bindings)
+3. Add your custom bindings to override the defaults
 
 For example, to change the Hot Reload shortcut to `Ctrl+Shift+R`:
 
