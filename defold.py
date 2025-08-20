@@ -6,7 +6,7 @@ import threading
 import time
 import urllib.request
 import urllib.error
-from datetime import datetime  # Add this import
+from datetime import datetime
 from typing import Dict, Optional, Any, List, Tuple
 
 class DefoldManager(sublime_plugin.EventListener):
@@ -312,7 +312,8 @@ def plugin_loaded():
         
         if not last_check or last_check != current_time:
             # Import here to avoid circular imports
-            from .defold_annotations import DefoldAnnotationsManager
+            # Fixed: Changed from relative to absolute import
+            import defold_annotations
             
             def on_check_complete(message, version):
                 if version:  # Only update if a new version was found
@@ -321,7 +322,7 @@ def plugin_loaded():
             
             # Delay the check to allow the editor to finish loading
             sublime.set_timeout(
-                lambda: DefoldAnnotationsManager.check_and_update(on_check_complete), 
+                lambda: defold_annotations.DefoldAnnotationsManager.check_and_update(on_check_complete), 
                 5000  # 5 seconds delay
             )
 

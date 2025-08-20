@@ -292,7 +292,8 @@ class DefoldUpdateConsoleContentCommand(sublime_plugin.TextCommand):
 class DefoldShowConsoleCommand(sublime_plugin.WindowCommand):
     def run(self) -> None:
         """Show the Defold console panel"""
-        from .defold import DefoldManager
+        # Fixed: Changed from relative to absolute import
+        import defold
         window = self.window
         console = DefoldConsole.instance()
         panel = console.get_panel(window)
@@ -301,7 +302,7 @@ class DefoldShowConsoleCommand(sublime_plugin.WindowCommand):
         window.run_command("show_panel", {"panel": "output.defold_console"})
         
         # Get the current port and refresh the console
-        port = DefoldManager.instance().get_current_port()
+        port = defold.DefoldManager.instance().get_current_port()
         if port:
             console.update_panel(window, port)
             console.start_auto_refresh(window, port)
@@ -309,10 +310,11 @@ class DefoldShowConsoleCommand(sublime_plugin.WindowCommand):
 class DefoldRefreshConsoleCommand(sublime_plugin.WindowCommand):
     def run(self) -> None:
         """Manually refresh the console content"""
-        from .defold import DefoldManager
+        # Fixed: Changed from relative to absolute import
+        import defold
         window = self.window
         console = DefoldConsole.instance()
-        port = DefoldManager.instance().get_current_port()
+        port = defold.DefoldManager.instance().get_current_port()
         if port:
             console.update_panel(window, port)
 
