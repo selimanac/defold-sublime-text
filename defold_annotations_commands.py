@@ -1,16 +1,28 @@
 import sublime
 import sublime_plugin
+import os
+import sys
 
 class DefoldCheckAnnotationsCommand(sublime_plugin.WindowCommand):
     def run(self):
-        # Changed from relative to absolute import
-        import defold_annotations
+        """Check for annotations updates"""
+        # Get the path to the annotations module
+        module_path = os.path.join(os.path.dirname(__file__), "defold_annotations.py")
         
-        # Show status message
-        self.window.status_message("Checking for Defold annotations updates...")
+        # Use direct globals access (THIS WORKS IN SUBLIME TEXT PLUGINS)
+        module_globals = {}
+        with open(module_path, 'r') as f:
+            exec(f.read(), module_globals)
+        
+        # Now we can access the class directly
+        DefoldAnnotationsManager = module_globals['DefoldAnnotationsManager']
         
         def on_complete(message, version):
-            self.window.status_message(message)
+            if version:
+                sublime.message_dialog(message)
+            else:
+                sublime.status_message(message)
         
-        # Start the update check
-        defold_annotations.DefoldAnnotationsManager.check_and_update(on_complete)
+        # Use the manager directly
+        DefoldAnnotationsManager.check_and_update(on_complete)
+        sublime.status_message("Checking for Defold annotations updates...")

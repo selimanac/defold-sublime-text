@@ -7,6 +7,8 @@ import threading
 import time
 import os
 import re
+import sys
+
 from typing import Dict, Optional, Any, List, Union, Callable, Tuple
 
 class DefoldConsole:
@@ -292,8 +294,17 @@ class DefoldUpdateConsoleContentCommand(sublime_plugin.TextCommand):
 class DefoldShowConsoleCommand(sublime_plugin.WindowCommand):
     def run(self) -> None:
         """Show the Defold console panel"""
-        # Fixed: Changed from relative to absolute import
-        import defold
+        # Fix: use sys.modules to get the defold module
+        defold_module = None
+        for module_name in sys.modules:
+            if module_name.endswith("defold"):
+                defold_module = sys.modules[module_name]
+                break
+                
+        if not defold_module:
+            sublime.error_message("Could not find defold module")
+            return
+            
         window = self.window
         console = DefoldConsole.instance()
         panel = console.get_panel(window)
@@ -302,7 +313,7 @@ class DefoldShowConsoleCommand(sublime_plugin.WindowCommand):
         window.run_command("show_panel", {"panel": "output.defold_console"})
         
         # Get the current port and refresh the console
-        port = defold.DefoldManager.instance().get_current_port()
+        port = defold_module.DefoldManager.instance().get_current_port()
         if port:
             console.update_panel(window, port)
             console.start_auto_refresh(window, port)
@@ -310,11 +321,20 @@ class DefoldShowConsoleCommand(sublime_plugin.WindowCommand):
 class DefoldRefreshConsoleCommand(sublime_plugin.WindowCommand):
     def run(self) -> None:
         """Manually refresh the console content"""
-        # Fixed: Changed from relative to absolute import
-        import defold
+        # Fix: use sys.modules to get the defold module
+        defold_module = None
+        for module_name in sys.modules:
+            if module_name.endswith("defold"):
+                defold_module = sys.modules[module_name]
+                break
+                
+        if not defold_module:
+            sublime.error_message("Could not find defold module")
+            return
+            
         window = self.window
         console = DefoldConsole.instance()
-        port = defold.DefoldManager.instance().get_current_port()
+        port = defold_module.DefoldManager.instance().get_current_port()
         if port:
             console.update_panel(window, port)
 
