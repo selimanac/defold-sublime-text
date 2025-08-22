@@ -92,17 +92,23 @@ Annotations are provided by [astrochili's defold-annotations](https://github.com
 - Type checking for Defold API
 
 ### Requirements:
-- LSP-lua package must be installed
-- Sublime LSP must be enabled
+- [LSP-lua](https://github.com/sublimelsp/LSP-lua) package must be installed
+- [Sublime LSP](https://lsp.sublimetext.io/language_servers/) must be enabled
 
 ### Usage:
 The package will automatically check for annotation updates on startup (if `auto_check_annotations` is enabled). You can also manually check for updates through the menu: `Tools > Defold > Annotations > Check for Updates`.
 
 ## Console Features
 
+![Console](/.github/st_defold_1.png?raw=true)
+
+
 The console view shows output from the Defold Editor with several optimizations:
 
 - **Clickable File References**: Click on the triangles (▶) next to file paths to jump directly to that file and line number
+
+![Console](/.github/st_defold_3.png?raw=true)   
+
 - **Performance Optimizations**: 
   - Only refreshes when visible to conserve resources
   - Automatically limits the number of lines shown (configurable via `console_max_lines`)
@@ -168,5 +174,8 @@ For example, to change the Hot Reload shortcut to `Ctrl+Shift+R`:
 ```
 
 ## Commands
+
+
+![Console](/.github/st_defold_1.png?raw=true)   
 
 All Defold commands are available through the Command Palette (`Ctrl+Shift+P` or `Cmd+Shift+P`) and the `Tools > Defold` menu.

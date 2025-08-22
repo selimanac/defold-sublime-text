@@ -9,6 +9,9 @@ annotations/version.txt
 *.temp
 *.bak
 
+*.sublime-project
+*.sublime-workspace
+
 # System files
 .DS_Store
 Thumbs.db
