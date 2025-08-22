@@ -16,7 +16,7 @@ A Sublime Text package for controlling the [Defold Editor](https://defold.com/) 
 
 ## Installation
 
-**This package requires Sublime Text 4 build 4200 or newer**
+**This package requires Sublime Text 4 build 4050 or newer**
 
 This package was specifically designed for the latest features in Sublime Text 4 (build 4200+) and will not work with earlier versions.
 
