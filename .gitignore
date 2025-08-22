@@ -12,6 +12,8 @@ annotations/version.txt
 *.sublime-project
 *.sublime-workspace
 
+package.json
+
 # System files
 .DS_Store
 Thumbs.db
