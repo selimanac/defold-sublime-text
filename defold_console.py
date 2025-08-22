@@ -8,6 +8,7 @@ import time
 import os
 import re
 import sys
+import socket
 
 from typing import Dict, Optional, Any, List, Union, Callable, Tuple
 
@@ -46,19 +47,42 @@ class DefoldConsole:
             self.phantom_set = sublime.PhantomSet(self.panel, "defold_resource_links")
         return self.panel
     
+    def is_port_available(self, port: int) -> bool:
+        """Check if a port is available before attempting connection"""
+        if not port:
+            return False
+            
+        try:
+            # Create a socket and try to connect to the port
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(0.5)  # Short timeout
+            result = sock.connect_ex(('localhost', port))
+            sock.close()
+            
+            # If result is 0, the connection succeeded (port is in use)
+            return result == 0
+        except:
+            return False
+    
     def fetch_console(self, port: Optional[int]) -> Optional[Dict]:
         """Fetch console data from the editor"""
         if not port:
             return None
             
+        # First check if port is available before attempting connection
+        if not self.is_port_available(port):
+            return None
+            
         try:
             url = f"http://localhost:{port}/console"
             req = urllib.request.Request(url)
-            with urllib.request.urlopen(req) as response:
+            with urllib.request.urlopen(req, timeout=1.0) as response:  # Add timeout
                 data = json.loads(response.read().decode('utf-8'))
                 return data
         except Exception as e:
-            print(f"Error fetching console data: {e}")
+            # Only log detailed error if it's not a connection error
+            if not isinstance(e, (urllib.error.URLError, socket.timeout)):
+                print(f"Error fetching console data: {e}")
             return None
 
     def is_console_visible(self, window: sublime.Window) -> bool:
@@ -75,6 +99,7 @@ class DefoldConsole:
         # Check if the console is visible before fetching data
         if not self.is_console_visible(window):
             # Console not visible, don't waste resources
+            self.stop_auto_refresh()  # Stop refresh if panel is not visible
             return False
             
         if not (data := self.fetch_console(port)):
@@ -215,6 +240,10 @@ class DefoldConsole:
                 # Only update if the console is visible
                 if window and self.is_console_visible(window):
                     sublime.set_timeout(lambda: self.update_panel(window, port), 0)
+                # If console is not visible, no need to continue refreshing
+                elif window:
+                    self.stop_auto_refresh()
+                    break
                 time.sleep(self.refresh_interval)
         
         self.refresh_thread = threading.Thread(target=refresh_loop)
@@ -225,8 +254,11 @@ class DefoldConsole:
         """Stop auto-refreshing the console"""
         self.auto_refresh = False
         if self.refresh_thread:
-            self.refresh_thread.join(timeout=1.0)
-            self.refresh_thread = None
+            try:
+                self.refresh_thread.join(timeout=1.0)
+                self.refresh_thread = None
+            except:
+                pass  # Thread already ended
     
     def add_resource_region(self, region: sublime.Region, resource_path: str, line_number: Optional[int] = None) -> None:
         """Store resource region for navigation"""
@@ -350,3 +382,10 @@ class DefoldClearConsoleCommand(sublime_plugin.WindowCommand):
             "auto_scroll": True
         })
         print("Defold console cleared")
+
+# Add a listener to stop auto-refresh when the panel is hidden
+class DefoldConsolePanelListener(sublime_plugin.EventListener):
+    def on_hide_panel(self, window, panel_name):
+        if panel_name == "output.defold_console":
+            print("Defold console panel hidden, stopping auto-refresh")
+            DefoldConsole.instance().stop_auto_refresh()
