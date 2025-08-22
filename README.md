@@ -1,6 +1,6 @@
 # Defold Sublime Text Package
 
-A Sublime Text package for controlling the Defold Editor using its HTTP API and managing the Defold extender server.
+A Sublime Text package for controlling the [Defold Editor](https://defold.com/) using its [HTTP API](https://github.com/defold/defold/blob/dev/editor/doc/http-api.md) and managing the Defold extender server.
 
 ## Features
 
@@ -10,8 +10,9 @@ A Sublime Text package for controlling the Defold Editor using its HTTP API and 
 - Monitor `.internal/editor.port` file changes automatically
 - Support for all Defold Editor commands
 - Key bindings for common operations
-- Defold Lua API annotations for code completion and documentation
-- Performance-optimized console with automatic resource linking
+- [Defold Lua API annotations](https://github.com/astrochili/defold-annotations) for code completion and documentation, thanks to the  [@astrochili](https://github.com/astrochili)
+- Console with automatic resource linking
+
 
 ## Installation
 
@@ -64,7 +65,8 @@ Example configuration:
 }
 ```
 
-**Note about port setting:** If you've launched Defold Editor with a custom port like:
+**Note about port setting:** If you've launched [Defold Editor with a custom port like](https://defold.com/manuals/editor/#editor-server):  
+
 ```
 # on Windows
 .\Defold.exe --port 8181
@@ -86,7 +88,7 @@ Annotations are provided by [astrochili's defold-annotations](https://github.com
 
 ### Features:
 - Automatic download and setup of Defold API annotations
-- Integration with LSP-lua package
+- Integration with [LSP-lua](https://github.com/sublimelsp/LSP-lua) package
 - Code completion for Defold API functions
 - Documentation on hover
 - Type checking for Defold API
@@ -110,6 +112,9 @@ The console view shows output from the Defold Editor with several optimizations:
 ![Console](/.github/st_defold_3.png?raw=true)   
 
 - **Performance Optimizations**: 
+    
+    The default Sublime Text panels are not really suitable for these kinds of tasks.
+
   - Only refreshes when visible to conserve resources
   - Automatically limits the number of lines shown (configurable via `console_max_lines`)
   - Provides a "Clear Console" command for manual cleanup
@@ -176,6 +181,6 @@ For example, to change the Hot Reload shortcut to `Ctrl+Shift+R`:
 ## Commands
 
 
-![Console](/.github/st_defold_1.png?raw=true)   
+![Console](/.github/st_defold_2.png?raw=true)   
 
 All Defold commands are available through the Command Palette (`Ctrl+Shift+P` or `Cmd+Shift+P`) and the `Tools > Defold` menu.
