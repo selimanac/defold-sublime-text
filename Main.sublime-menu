@@ -1,36 +1,5 @@
 [
     {
-        "id": "preferences",
-        "children": [
-            {
-                "id": "package-settings",
-                "children": [
-                    {
-                        "caption": "Defold",
-                        "children": [
-                            {
-                                "caption": "Settings",
-                                "command": "edit_settings",
-                                "args": {
-                                    "base_file": "${packages}/Defold/Defold.sublime-settings",
-                                    "default": "{\n\t$0\n}"
-                                }
-                            },
-                            {
-                                "caption": "Key Bindings",
-                                "command": "edit_settings",
-                                "args": {
-                                    "base_file": "${packages}/Defold/Default.sublime-keymap",
-                                    "default": "[\n\t$0\n]"
-                                }
-                            }
-                        ]
-                    }
-                ]
-            }
-        ]
-    },
-    {
         "id": "tools",
         "children": [
             {
@@ -48,6 +17,7 @@
                                     "command": "build"
                                 }
                             },
+                            // Rest of build commands...
                             {
                                 "caption": "Hot Reload",
                                 "command": "defold_command_handler",
@@ -340,6 +310,37 @@
                             {
                                 "caption": "Check for Updates",
                                 "command": "defold_check_annotations"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "preferences",
+        "children": [
+            {
+                "id": "package-settings",
+                "children": [
+                    {
+                        "caption": "Defold",
+                        "children": [
+                            {
+                                "caption": "Settings",
+                                "command": "edit_settings",
+                                "args": {
+                                    "base_file": "${packages}/Defold/Defold.sublime-settings",
+                                    "default": "{\n\t$0\n}"
+                                }
+                            },
+                            {
+                                "caption": "Key Bindings",
+                                "command": "edit_settings",
+                                "args": {
+                                    "base_file": "${packages}/Defold/Default.sublime-keymap",
+                                    "default": "[\n\t$0\n]"
+                                }
                             }
                         ]
                     }
