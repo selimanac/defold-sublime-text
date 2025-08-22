@@ -6,7 +6,7 @@ import zipfile
 import shutil
 import re
 import threading
-from datetime import datetime
+
 
 class DefoldAnnotationsManager:
     GITHUB_API_URL = "https://api.github.com/repos/astrochili/defold-annotations/releases/latest"

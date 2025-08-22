@@ -1,7 +1,7 @@
 import sublime
 import sublime_plugin
 import os
-import sys
+
 
 class DefoldCheckAnnotationsCommand(sublime_plugin.WindowCommand):
     def run(self):

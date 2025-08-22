@@ -6,11 +6,10 @@ import urllib.error
 import threading
 import time
 import os
-import re
 import sys
 import socket
 
-from typing import Dict, Optional, Any, List, Union, Callable, Tuple
+from typing import Dict, Optional, List, Union
 
 class DefoldConsole:
     _instance = None

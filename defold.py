@@ -5,9 +5,8 @@ import os
 import threading
 import time
 import urllib.request
-import urllib.error
 from datetime import datetime
-from typing import Dict, Optional, Any, List, Tuple
+from typing import Dict, Optional, Any
 
 class DefoldManager(sublime_plugin.EventListener):
     _instance = None
@@ -311,20 +310,38 @@ def plugin_loaded():
         current_time = datetime.now().strftime("%Y-%m-%d")
         
         if not last_check or last_check != current_time:
-            # Import here to avoid circular imports
-            # Fixed: Changed from relative to absolute import
-            import defold_annotations
-            
-            def on_check_complete(message, version):
-                if version:  # Only update if a new version was found
-                    settings.set("last_annotations_check", current_time)
-                    sublime.save_settings("Defold.sublime-settings")
-            
-            # Delay the check to allow the editor to finish loading
-            sublime.set_timeout(
-                lambda: defold_annotations.DefoldAnnotationsManager.check_and_update(on_check_complete), 
-                5000  # 5 seconds delay
-            )
+            # Import using a more reliable method for Sublime Text plugins
+            try:
+                # Get current directory (where this file is located)
+                plugin_dir = os.path.dirname(os.path.abspath(__file__))
+                
+                # Load the module directly from file path
+                module_path = os.path.join(plugin_dir, "defold_annotations.py")
+                
+                # Use execfile-like approach to load the module
+                module_globals = {}
+                with open(module_path, 'r') as f:
+                    exec(f.read(), module_globals)
+                
+                # Extract the manager class
+                DefoldAnnotationsManager = module_globals['DefoldAnnotationsManager']
+                
+                # Define callback
+                def on_check_complete(version):
+                    if version:  # Only update if a new version was found
+                        settings.set("last_annotations_check", current_time)
+                        sublime.save_settings("Defold.sublime-settings")
+                
+                # Call the check method
+                sublime.set_timeout(
+                    lambda: DefoldAnnotationsManager.check_and_update(on_check_complete), 
+                    5000  # 5 seconds delay
+                )
+                
+            except Exception as e:
+                print(f"Error loading annotations module: {e}")
+                import traceback
+                traceback.print_exc()
 
 def plugin_unloaded() -> None:
     print("Defold plugin unloaded")
