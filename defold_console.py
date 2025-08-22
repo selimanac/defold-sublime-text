@@ -9,7 +9,7 @@ import os
 import sys
 import socket
 
-from typing import Dict, Optional, List, Union
+from typing import Dict, Optional, List, Union, Any
 
 class DefoldConsole:
     _instance = None
@@ -29,21 +29,23 @@ class DefoldConsole:
         self.refresh_interval: float = settings.get("console_refresh_interval", 2.0)  
         self.panel_lock = threading.Lock()
         self.phantom_set: Optional[sublime.PhantomSet] = None
-        self.resource_regions: Dict[str, Dict[str, Union[str, int]]] = {}
+        self.resource_regions: Dict[str, Dict[str, Any]] = {}
         # Add a max lines setting
         self.max_lines: int = settings.get("console_max_lines", 1000)
     
     def get_panel(self, window: sublime.Window) -> sublime.View:
         """Get or create the console output panel"""
-        if not self.panel:
+        if self.panel is None:
+            # Create a new panel
             self.panel = window.create_output_panel("defold_console")
-            self.panel.settings().set("word_wrap", True)
-            self.panel.settings().set("line_numbers", False)
-            self.panel.settings().set("gutter", False)
-            self.panel.settings().set("scroll_past_end", False)
-            self.panel.assign_syntax("Packages/Defold/Defold Console.sublime-syntax")
-            # Create phantom set for this panel
-            self.phantom_set = sublime.PhantomSet(self.panel, "defold_resource_links")
+            if self.panel:  # Check if panel was created successfully
+                self.panel.settings().set("word_wrap", True)
+                self.panel.settings().set("line_numbers", False)
+                self.panel.settings().set("gutter", False)
+                self.panel.settings().set("scroll_past_end", False)
+                self.panel.assign_syntax("Packages/Defold/Defold Console.sublime-syntax")
+                # Create phantom set for this panel
+                self.phantom_set = sublime.PhantomSet(self.panel, "defold_resource_links")
         return self.panel
     
     def is_port_available(self, port: int) -> bool:
@@ -73,8 +75,8 @@ class DefoldConsole:
             return None
             
         try:
-            url = f"http://localhost:{port}/console"
-            req = urllib.request.Request(url)
+            request_url = f"http://localhost:{port}/console"
+            req = urllib.request.Request(request_url)
             with urllib.request.urlopen(req, timeout=1.0) as response:  # Add timeout
                 data = json.loads(response.read().decode('utf-8'))
                 return data
@@ -106,7 +108,10 @@ class DefoldConsole:
             
         with self.panel_lock:
             panel = self.get_panel(window)
-            
+            if not panel:  # Guard against None
+                print("Could not create console panel")
+                return False
+                
             # Check if view is scrolled to the bottom before updating
             visible_region = panel.visible_region()
             last_line_visible = False
@@ -262,7 +267,10 @@ class DefoldConsole:
     def add_resource_region(self, region: sublime.Region, resource_path: str, line_number: Optional[int] = None) -> None:
         """Store resource region for navigation"""
         key = f"{region.a},{region.b}"
-        self.resource_regions[key] = {"path": resource_path, "line": line_number}
+        resource_info: Dict[str, Any] = {"path": resource_path}
+        if line_number is not None:
+            resource_info["line"] = line_number
+        self.resource_regions[key] = resource_info
     
     def get_resource_at_point(self, point: int) -> Optional[Dict[str, Union[str, int]]]:
         """Get resource info at the given point"""
@@ -338,16 +346,19 @@ class DefoldShowConsoleCommand(sublime_plugin.WindowCommand):
             
         window = self.window
         console = DefoldConsole.instance()
-        panel = console.get_panel(window)
+        console_panel = console.get_panel(window)
         
         # Show the panel
-        window.run_command("show_panel", {"panel": "output.defold_console"})
-        
-        # Get the current port and refresh the console
-        port = defold_module.DefoldManager.instance().get_current_port()
-        if port:
-            console.update_panel(window, port)
-            console.start_auto_refresh(window, port)
+        if console_panel:
+            window.run_command("show_panel", {"panel": "output.defold_console"})
+            
+            # Get the current port and refresh the console
+            port = defold_module.DefoldManager.instance().get_current_port()
+            if port:
+                console.update_panel(window, port)
+                console.start_auto_refresh(window, port)
+        else:
+            sublime.error_message("Failed to create console panel")
 
 class DefoldRefreshConsoleCommand(sublime_plugin.WindowCommand):
     def run(self) -> None:
@@ -374,13 +385,16 @@ class DefoldClearConsoleCommand(sublime_plugin.WindowCommand):
     def run(self) -> None:
         """Clear the console content"""
         console = DefoldConsole.instance()
-        panel = console.get_panel(self.window)
-        panel.run_command("defold_update_console_content", {
-            "lines": [],
-            "regions": [],
-            "auto_scroll": True
-        })
-        print("Defold console cleared")
+        console_panel = console.get_panel(self.window)
+        if console_panel:
+            console_panel.run_command("defold_update_console_content", {
+                "lines": [],
+                "regions": [],
+                "auto_scroll": True
+            })
+            print("Defold console cleared")
+        else:
+            print("No console panel to clear")
 
 # Add a listener to stop auto-refresh when the panel is hidden
 class DefoldConsolePanelListener(sublime_plugin.EventListener):
