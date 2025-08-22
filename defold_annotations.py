@@ -19,7 +19,7 @@ class DefoldAnnotationsManager:
         thread.daemon = True
         thread.start()
     
-    @classmethod
+    @classmethod 
     def _check_and_update_async(cls, on_complete):
         try:
             # Create download folder if it doesn't exist

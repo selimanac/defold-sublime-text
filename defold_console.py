@@ -8,19 +8,20 @@ import time
 import os
 import sys
 import socket
-
-from typing import Dict, Optional, List, Union, Any
+from typing import Dict, Optional, List, Any
 
 class DefoldConsole:
     _instance = None
     
     @classmethod
-    def instance(cls):
+    def instance(cls): 
+        """Get singleton instance of DefoldConsole"""
         if cls._instance is None:
             cls._instance = DefoldConsole()
         return cls._instance
     
     def __init__(self):
+        """Initialize the console"""
         self.panel: Optional[sublime.View] = None
         self.auto_refresh: bool = False
         self.refresh_thread: Optional[threading.Thread] = None
@@ -32,8 +33,12 @@ class DefoldConsole:
         self.resource_regions: Dict[str, Dict[str, Any]] = {}
         # Add a max lines setting
         self.max_lines: int = settings.get("console_max_lines", 1000)
+        # Add throttling for high-volume updates
+        self._last_update: float = 0
+        # Minimum time between updates in seconds
+        self._throttle_time: float = 0.1
     
-    def get_panel(self, window: sublime.Window) -> sublime.View:
+    def get_panel(self, window: sublime.Window) -> Optional[sublime.View]:
         """Get or create the console output panel"""
         if self.panel is None:
             # Create a new panel
@@ -62,7 +67,7 @@ class DefoldConsole:
             
             # If result is 0, the connection succeeded (port is in use)
             return result == 0
-        except:
+        except (socket.error, OSError):
             return False
     
     def fetch_console(self, port: Optional[int]) -> Optional[Dict]:
@@ -80,11 +85,15 @@ class DefoldConsole:
             with urllib.request.urlopen(req, timeout=1.0) as response:  # Add timeout
                 data = json.loads(response.read().decode('utf-8'))
                 return data
+        except urllib.error.URLError as e:
+            # Quiet fail on connection errors
+            pass
+        except socket.timeout:
+            # Quiet fail on timeouts
+            pass
         except Exception as e:
-            # Only log detailed error if it's not a connection error
-            if not isinstance(e, (urllib.error.URLError, socket.timeout)):
-                print(f"Error fetching console data: {e}")
-            return None
+            print(f"Error fetching console data: {e}")
+        return None
 
     def is_console_visible(self, window: sublime.Window) -> bool:
         """Check if the console panel is currently visible"""
@@ -97,6 +106,12 @@ class DefoldConsole:
     
     def update_panel(self, window: sublime.Window, port: Optional[int]) -> bool:
         """Update the console panel with data from the editor"""
+        # Apply throttling for high-volume updates
+        current_time = time.time()
+        if (current_time - self._last_update) < self._throttle_time:
+            return False  # Skip this update, too soon after last one
+        self._last_update = current_time
+            
         # Check if the console is visible before fetching data
         if not self.is_console_visible(window):
             # Console not visible, don't waste resources
@@ -240,6 +255,7 @@ class DefoldConsole:
         self.auto_refresh = True
         
         def refresh_loop() -> None:
+            """Thread main loop for console refresh"""
             while self.auto_refresh:
                 # Only update if the console is visible
                 if window and self.is_console_visible(window):
@@ -257,12 +273,12 @@ class DefoldConsole:
     def stop_auto_refresh(self) -> None:
         """Stop auto-refreshing the console"""
         self.auto_refresh = False
-        if self.refresh_thread:
+        if self.refresh_thread and self.refresh_thread.is_alive():
             try:
                 self.refresh_thread.join(timeout=1.0)
                 self.refresh_thread = None
-            except:
-                pass  # Thread already ended
+            except RuntimeError as e:
+                print(f"Error stopping refresh thread: {e}")
     
     def add_resource_region(self, region: sublime.Region, resource_path: str, line_number: Optional[int] = None) -> None:
         """Store resource region for navigation"""
@@ -272,7 +288,7 @@ class DefoldConsole:
             resource_info["line"] = line_number
         self.resource_regions[key] = resource_info
     
-    def get_resource_at_point(self, point: int) -> Optional[Dict[str, Union[str, int]]]:
+    def get_resource_at_point(self, point: int) -> Optional[Dict[str, Any]]:
         """Get resource info at the given point"""
         for region_str, info in self.resource_regions.items():
             start, end = map(int, region_str.split(','))
@@ -380,7 +396,6 @@ class DefoldRefreshConsoleCommand(sublime_plugin.WindowCommand):
         if port:
             console.update_panel(window, port)
 
-# Add the Clear Console command
 class DefoldClearConsoleCommand(sublime_plugin.WindowCommand):
     def run(self) -> None:
         """Clear the console content"""
@@ -396,9 +411,9 @@ class DefoldClearConsoleCommand(sublime_plugin.WindowCommand):
         else:
             print("No console panel to clear")
 
-# Add a listener to stop auto-refresh when the panel is hidden
 class DefoldConsolePanelListener(sublime_plugin.EventListener):
     def on_hide_panel(self, window, panel_name):
+        """Stop refreshing when the panel is hidden"""
         if panel_name == "output.defold_console":
             print("Defold console panel hidden, stopping auto-refresh")
             DefoldConsole.instance().stop_auto_refresh()
